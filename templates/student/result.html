@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="result-container">
+        <h1>Student Result</h1>
+        <div class="student-info">
+            <p><strong>Name:</strong> John Doe</p>
+            <p><strong>Subject Marks:</strong></p>
+            <ul>
+                <li>Mathematics: 85</li>
+                <li>Science: 90</li>
+                <li>English: 78</li>
+            </ul>
+            <p><strong>Total:</strong> 253</p>
+            <p><strong>Percentage:</strong> 84.33%</p>
+            <p><strong>Grade:</strong> A</p>
+            <p><strong>Status:</strong> Pass</p>
+        </div>
+        <button onclick="downloadResult()">Download Result</button>
+    </div>
+
+    <script>
+        function downloadResult() {
+            const element = document.createElement('a');
+            const file = new Blob([document.querySelector('.result-container').innerText], { type: 'text/plain' });
+            element.href = URL.createObjectURL(file);
+            element.download = 'student_result.txt';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+    </script>
+</body>
+</html>
