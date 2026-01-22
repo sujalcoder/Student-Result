@@ -65,11 +65,12 @@ def add_student():
     if request.method == 'POST':
         student_name = request.form['student_name']
         roll_no = request.form['roll_no']
-
+        course = request.form['course']
         # Insert new student into the database
         students.insert_one({
             'name': student_name,
-            'roll_no': roll_no
+            'roll_no': roll_no,
+            'course': course
         })
 
         return render_template(
@@ -78,3 +79,9 @@ def add_student():
         )
 
     return render_template('add_student.html')
+
+# MANAGE STUDENT ROUTE
+@admin_bp.route('/admin/manage-student', methods=['GET', 'POST'])  
+def manage_student():  
+    all_students = students.find()
+    return render_template('manage_student.html', students=all_students)

@@ -9,11 +9,11 @@
 
     <header class="header">
         <h1>Add Teacher</h1>
-        <a href="admin_dashboard.html" class="logout-btn">Back</a>
+        <a href="/admin/dashboard" class="logout-btn">Back</a>
     </header>
 
     <div class="form-container">
-        <form method="POST">
+        <form method="POST" action="/admin/add-teacher">
             <label>Teacher Name</label>
             <input type="text" name="teacher_name" placeholder="Enter Name" required>
             <label>Gender</label></br>
@@ -34,7 +34,7 @@
                         <option value="Teacher">Teacher</option>
                         <option value="Viewer">Viewer</option>
                     </select></br>
-                    
+
             <label>Teacher Username</label>
             <input type="text" name="username" placeholder="Enter username" required>
 

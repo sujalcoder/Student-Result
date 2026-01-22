@@ -17,16 +17,32 @@
     <div class="container">
        
 
-        <div class="card">
-            <h2>Manage Students</h2>
-            <p>View / Remove students</p>
-            <a href="#" class="btn">Go</a>
-        </div>
+       <h2>All Students</h2>
+
+<table border="1" cellpadding="10">
+    <tr>
+        
+        <th>Name</th>
+        <th>Roll No</th>
+        <th>Class</th>
+        
+    </tr>
+
+    {% for s in students %}
+    <tr>
+        <td>{{ s.name }}</td>
+        <td>{{ s.roll_no }}</td>
+        <td>{{ s.course }}</td>
+        
+    </tr>
+    {% endfor %}
+
+</table>
 
         <div class="card">
             <h2>Add Students</h2>
             <p>Add new students</p>
-            <a href="add_students.html" class="btn">Go</a>
+            <a href="/admin/add-student" class="btn">Go</a>
         </div>
     </div>
 
