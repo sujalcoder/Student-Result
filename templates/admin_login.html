@@ -10,7 +10,7 @@
 <body>
     <div class="login-container">
         <h1>Admin Login</h1>
-        <form method="POST">
+        <form method="POST" action="/admin/login">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
@@ -22,5 +22,6 @@
             <button type="submit">Login</button>
         </form>
     </div>
+    <a href="/student/login">Back</a>
 </body>
 </html>

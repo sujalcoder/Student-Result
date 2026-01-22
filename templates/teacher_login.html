@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Login</title>
-    <link rel="stylesheet" href="C:\Users\sujal\OneDrive\Documents\Student_marks\style\admin.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+
 </head>
 <body>
     <div class="login-container">
         <h1>Teacher Login</h1>
-        <form method="POST" action="/teacher_login">
+        <form method="POST" action="/teacher/login">
+
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
@@ -24,7 +26,7 @@
         </form>
         
         <div class="links">
-            <p>Are you a student? <a href="index.html">Student Login</a></p>
+            <p>Are you a student? <a href="/student/login">Student Login</a></p>
         </div>
     </div>  
 </body>

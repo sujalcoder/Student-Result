@@ -20,3 +20,12 @@ def teacher_login():
             )
 
     return render_template('teacher_login.html')
+
+
+# TEACHER DASHBOARD ROUTE
+@teacher_bp.route('/teacher_dashboard', methods=['GET', 'POST'])
+def teacher_dashboard():
+    return render_template('teacher_dashboard.html')
+
+
+

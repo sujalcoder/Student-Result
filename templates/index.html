@@ -10,10 +10,11 @@
     <div class="container">
         <h1>Student Marks</h1>
         <p>Welcome to the Student Marks System</p>
-        <form action="/result" method="post">
-        <input type="number" placeholder="Enter student RollNo" /></br>
-        <button type="submit">Get Marks</button>  <p>Are you a Teacher? <a href="teacher_login.html">Teacher Login</a></p> 
+        <form action="/student/login" method="post">
+        <input type="number" maxlength="1000" minlength="1" required name="roll_no" placeholder="Enter student RollNo" /></br>
+        <button type="submit">Get Marks</button>  <p>Are you a Teacher? <a href="/teacher/login">Teacher Login</a></p> 
     </form>
-    </div>
+    
+    
 </body>
 </html>
