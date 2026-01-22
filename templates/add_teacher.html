@@ -14,6 +14,27 @@
 
     <div class="form-container">
         <form method="POST">
+            <label>Teacher Name</label>
+            <input type="text" name="teacher_name" placeholder="Enter Name" required>
+            <label>Gender</label></br>
+            <input type="radio" name="gender" value="Male" required>
+            <label>Male</label>
+            <input type="radio" name="gender" value="Female" required>
+            <label>Female</label>
+            <input type="radio" name="gender" value="Other" required>
+            <label>Other</label></br>
+            <label>Teacher </label>
+            <input type="checkbox" name="section[]" value="Bscit">B.Sc.I.T.</br>
+            <input type="checkbox" name="section[]" value="Bscit">B.Sc.C.S.</br>
+            <input type="checkbox" name="section[]" value="Bscit">B.Com</br>
+            <input type="checkbox" name="section[]" value="Bscit">B.B.I</br>
+             <label >Rights:</label>
+                    <select  name="rights" required>
+                        <option value="">Select Rights</option>
+                        <option value="Teacher">Teacher</option>
+                        <option value="Viewer">Viewer</option>
+                    </select></br>
+                    
             <label>Teacher Username</label>
             <input type="text" name="username" placeholder="Enter username" required>
 

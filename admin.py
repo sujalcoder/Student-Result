@@ -32,12 +32,15 @@ def admin_dashboard():
 @admin_bp.route('/admin/add-teacher', methods=['GET', 'POST'])
 def add_teacher():
     if request.method == 'POST':
+        teacher_name = request.form['teacher_name']
+        teacher_gender = request.form['teacher_gender']
+        section = request.form['section']
         teacher_username = request.form['teacher_username']
         teacher_password = request.form['teacher_password']
 
         # Insert new teacher into the database
         teachers.insert_one({
-            'teacher_name': teacher_name,
+            'name': teacher_name,
             'username': teacher_username,
             'password': teacher_password
         })
