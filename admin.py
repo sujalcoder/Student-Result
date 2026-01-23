@@ -74,7 +74,7 @@ def add_student():
     if request.method == 'POST':
         student_name = request.form['student_name']
         roll_no = request.form['roll_no']
-        section = request.form['course']
+        section = request.form['section ']
         existing_student=students.find_one({'roll_no': roll_no})
         if existing_student:
             return render_template(
