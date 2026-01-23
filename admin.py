@@ -33,13 +33,14 @@ def admin_dashboard():
 def add_teacher():
     if request.method == 'POST':
         teacher_name = request.form['teacher_name']
-        teacher_gender = request.form['teacher_gender']
-        section = request.form['section']
-        teacher_username = request.form['teacher_username']
-        teacher_password = request.form['teacher_password']
+        gender = request.form['gender']
+        section = request.form.getlist('section')
+        rights = request.form['rights']
+        username = request.form['username']
+        password = request.form['password']
 
         # 🔍 Check duplicate username
-        existing_teacher = teachers.find_one({'username': teacher_username})
+        existing_teacher = teachers.find_one({'username': username})
         if existing_teacher:
             return render_template(
                 'add_teacher.html',
@@ -49,10 +50,11 @@ def add_teacher():
         # ✅ Insert teacher
         teachers.insert_one({
             'name': teacher_name,
-            'gender': teacher_gender,
+            'gender': gender,
             'section': section,
-            'username': teacher_username,
-            'password': teacher_password   # hashing later
+            'rights': rights,
+            'username': username,
+            'password': password   # hashing later
         })
 
         # 🔁 Redirect to avoid duplicate submit
