@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request , redirect, url_for
 from database import teachers, marks ,students, admins
-
+from pymongo.errors import DuplicateKeyError
 admin_bp = Blueprint("admin", __name__)
 
 
@@ -38,19 +38,28 @@ def add_teacher():
         teacher_username = request.form['teacher_username']
         teacher_password = request.form['teacher_password']
 
-        # Insert new teacher into the database
+        # 🔍 Check duplicate username
+        existing_teacher = teachers.find_one({'username': teacher_username})
+        if existing_teacher:
+            return render_template(
+                'add_teacher.html',
+                error='Teacher username already exists'
+            )
+
+        # ✅ Insert teacher
         teachers.insert_one({
             'name': teacher_name,
+            'gender': teacher_gender,
+            'section': section,
             'username': teacher_username,
-            'password': teacher_password
+            'password': teacher_password   # hashing later
         })
 
-        return render_template(
-            'manage_teacher.html',
-            success='Teacher added successfully!'
-        )
+        # 🔁 Redirect to avoid duplicate submit
+        return redirect(url_for('admin.manage_teacher'))
 
     return render_template('add_teacher.html')
+
 
 # MANAGE TEACHER ROUTE
 @admin_bp.route('/admin/manage-teacher', methods=['GET', 'POST'])
@@ -58,25 +67,44 @@ def manage_teacher():
     all_teachers = list(teachers.find())
     return render_template('manage_teacher.html', teachers=all_teachers) 
 
-
 # ADD STUDENT ROUTE
-@admin_bp.route('/admin/add-student', methods=['GET', 'POST'])  
+
+@admin_bp.route('/admin/add-student', methods=['GET', 'POST'])
 def add_student():
     if request.method == 'POST':
         student_name = request.form['student_name']
         roll_no = request.form['roll_no']
-        course = request.form['course']
-        # Insert new student into the database
-        students.insert_one({
-            'name': student_name,
-            'roll_no': roll_no,
-            'course': course
-        })
+        section = request.form['course']
+        existing_student=students.find_one({'roll_no': roll_no})
+        if existing_student:
+            return render_template(
+                'add_student.html',
+                error='Roll No already exists'
+            )
+        else:
 
-        return render_template(
-            'manage_student.html',
-            success='Student added successfully!'
-        )
+         # ✅ Insert student
+            try:
+                students.insert_one({
+                   'name': student_name,
+                   'roll_no': roll_no,
+                   'section': section
+            })
+
+            # ✅ Redirect after POST (VERY IMPORTANT)
+                return redirect(url_for('admin.manage_student'))
+
+            except DuplicateKeyError:
+                return render_template(
+                  'add_student.html',
+                   error='Roll No already exists'
+            )
+
+            except Exception as e:
+                return render_template(
+                  'add_student.html',
+                   error='Something went wrong'
+            )
 
     return render_template('add_student.html')
 
