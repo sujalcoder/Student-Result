@@ -168,32 +168,41 @@
         <h1>Manage Teachers</h1>
         
         <table>
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Designation</th>
-                    <th>Rights</th>
-                    <th>Gender</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="teacherTable">
-                <tr>
-                    <td>jdoe</td>
-                    <td>John Doe</td>
-                    <td>Senior Teacher</td>
-                    <td>Admin</td>
-                    <td>Male</td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn-edit" onclick="editTeacher(this)">Edit</button>
-                            <button class="btn-delete" onclick="deleteTeacher(this)">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Section</th>
+            <th>Rights</th>
+            <th>Gender</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for t in teachers %}
+        <tr>
+            <td>{{ t.username }}</td>
+            <td>{{ t.name }}</td>
+            <td>{{ t.section }}</td>
+            <td>{{ t.rights }}</td>
+            <td>{{ t.gender }}</td>
+            <td>
+                <div class="actions">
+                    <button class="btn-edit" onclick="editTeacher(this)">Edit</button>
+
+                    <!-- ✅ DELETE FORM -->
+                    <form method="POST" action="/admin/delete-teacher" style="display:inline;">
+                        <input type="hidden" name="username" value="{{ t.username }}">
+                        <button type="submit" class="btn-delete">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
     </div>
     
     <!-- Edit Modal -->
@@ -249,18 +258,19 @@
             <a href="/admin/add-teacher" class="btn">Go</a>
         </div>
     <script>
-        function editTeacher(btn) {
-            const row = btn.closest('tr');
-            const cells = row.querySelectorAll('td');
-            
-            document.getElementById('username').value = cells[0].textContent;
-            document.getElementById('name').value = cells[1].textContent;
-            document.getElementById('designation').value = cells[2].textContent;
-            document.getElementById('rights').value = cells[3].textContent;
-            document.getElementById('gender').value = cells[4].textContent;
-            
-            document.getElementById('editModal').style.display = 'block';
-        }
+       function editTeacher(btn) {
+    const row = btn.closest('tr');
+    const cells = row.children;
+
+    document.getElementById('username').value = cells[0].innerText;
+    document.getElementById('name').value = cells[1].innerText;
+    document.getElementById('designation').value = cells[2].innerText;
+    document.getElementById('rights').value = cells[3].innerText;
+    document.getElementById('gender').value = cells[4].innerText;
+
+    document.getElementById('editModal').style.display = 'block';
+}
+
         
         function deleteTeacher(btn) {
             if (confirm('Are you sure you want to delete this teacher?')) {

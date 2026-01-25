@@ -43,7 +43,7 @@ def add_teacher():
         existing_teacher = teachers.find_one({'username': username})
         if existing_teacher:
             return render_template(
-                'add_teacher.html',
+                'add_teacher.html',     
                 error='Teacher username already exists'
             )
 
@@ -70,7 +70,6 @@ def manage_teacher():
     return render_template('manage_teacher.html', teachers=all_teachers) 
 
 # ADD STUDENT ROUTE
-
 @admin_bp.route('/admin/add-student', methods=['GET', 'POST'])
 def add_student():
     if request.method == 'POST':
@@ -115,3 +114,11 @@ def add_student():
 def manage_student():  
     all_students = students.find()
     return render_template('manage_student.html', students=all_students)
+
+
+#delete teacher route
+@admin_bp.route('/admin/delete-teacher', methods=['POST'])
+def delete_teacher():
+    username = request.form['username']
+    teachers.delete_one({'username': username})
+    return redirect(url_for('admin.manage_teacher'))
