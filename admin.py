@@ -34,7 +34,7 @@ def add_teacher():
     if request.method == 'POST':
         teacher_name = request.form['teacher_name']
         gender = request.form['gender']
-        section = request.form.getlist('section')
+        section = request.form.getlist('section[]')
         rights = request.form['rights']
         username = request.form['username']
         password = request.form['password']
