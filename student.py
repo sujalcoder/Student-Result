@@ -20,9 +20,54 @@ def student_login():
 
     return render_template('index.html')
 
-# STUDENT RESULT ROUTE
-@students_bp.route('/result', methods=['GET', 'POST'])  
+
+@students_bp.route('/result', methods=['POST'])
 def student_result():
-    all_marks = list(marks.find())
-    total=
-    return render_template('result.html', marks=all_marks)
+    roll_no = str(request.form['roll_no'])
+
+    marks_data = marks.find_one({'roll_no': roll_no})
+    print("MARKS DATA:", marks_data)
+
+    if not marks_data:
+        return render_template(
+            'index.html',
+            error='No result found'
+        )
+
+    # ✅ CASE A: NEW STRUCTURE
+    if 'subjects' in marks_data:
+        subjects = marks_data['subjects']
+
+    # ✅ CASE B: OLD STRUCTURE
+    else:
+        cursor = marks.find({'roll_no': roll_no})
+        subjects = {m['subject']: m['marks_obtained'] for m in cursor}
+
+    if not subjects:
+        return render_template(
+            'index.html',
+            error='No subjects found for this Roll Number'
+        )
+
+    total = sum(subjects.values())
+    percentage = round(total / (len(subjects) * 100) * 100, 2)
+
+    if percentage >= 75:
+        grade = 'A'
+    elif percentage >= 60:
+        grade = 'B'
+    elif percentage >= 50:
+        grade = 'C'
+    elif percentage >= 35:
+        grade = 'D'
+    else:
+        grade = 'Fail'
+
+    return render_template(
+        'result.html',
+        roll_no=roll_no,
+        subjects=subjects,
+        total=total,
+        percentage=percentage,
+        grade=grade
+    )
