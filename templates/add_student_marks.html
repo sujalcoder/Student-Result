@@ -3,37 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <title>Add / Update Marks</title>
-    <link rel="stylesheet" href="C:\Users\sujal\OneDrive\Documents\Student_marks\style\admin.css">
+
+    <!-- Flask static CSS (recommended) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+
+    <style>
+        .subject-group {
+            display: none;
+            margin-top: 15px;
+        }
+        .subject-group label {
+            display: block;
+            margin-top: 8px;
+        }
+    </style>
 </head>
+
 <body>
 
 <header class="header">
     <h1>Add / Update Student Marks</h1>
-    <a href="teacher_dashboard.html" class="logout-btn">Back</a>
+    <a href="/teacher/dashboard" class="logout-btn">Back</a>
 </header>
 
 <div class="form-container">
     <h2>Enter Student Marks</h2>
 
-    <form method="POST" action="/add_students_marks">
+    <form method="POST" action="/add-marks">
 
         <!-- Roll Number -->
         <label>Roll Number</label>
         <input type="text" name="roll_no" placeholder="Enter roll number" required>
 
-        <!-- Subjects -->
-        <label>Math</label>
-        <input type="number" name="math" min="0" max="100" required>
+        <!-- Section -->
+        <label>Course / Section</label><br>
 
-        <label>Science</label>
-        <input type="number" name="science" min="0" max="100" required>
+        <input type="radio" name="section" value="bscit" onclick="showSubjects('bscit')" required> BSc IT<br>
+        <input type="radio" name="section" value="bsccs" onclick="showSubjects('bsccs')"> BSc CS<br>
+        <input type="radio" name="section" value="bbi" onclick="showSubjects('bbi')"> BBI<br>
+        <input type="radio" name="section" value="bcom" onclick="showSubjects('bcom')"> BCom<br>
 
-        <label>English</label>
-        <input type="number" name="english" min="0" max="100" required>
+        <!-- ================= SUBJECTS ================= -->
+
+        <!-- BSC IT -->
+        <div id="bscit" class="subject-group">
+            <label>Python</label>
+            <input type="number" name="python" min="0" max="100">
+
+            <label>Networking</label>
+            <input type="number" name="networking" min="0" max="100">
+
+            <label>Web Development</label>
+            <input type="number" name="web" min="0" max="100">
+        </div>
+
+        <!-- BSC CS -->
+        <div id="bsccs" class="subject-group">
+            <label>C Programming</label>
+            <input type="number" name="c" min="0" max="100">
+
+            <label>Data Structures</label>
+            <input type="number" name="ds" min="0" max="100">
+
+            <label>Operating System</label>
+            <input type="number" name="os" min="0" max="100">
+        </div>
+
+        <!-- BBI -->
+        <div id="bbi" class="subject-group">
+            <label>Accounts</label>
+            <input type="number" name="accounts" min="0" max="100">
+
+            <label>Management</label>
+            <input type="number" name="management" min="0" max="100">
+
+            <label>Finance</label>
+            <input type="number" name="finance" min="0" max="100">
+        </div>
+
+        <!-- BCOM -->
+        <div id="bcom" class="subject-group">
+            <label>Accounts</label>
+            <input type="number" name="accounts" min="0" max="100">
+
+            <label>Economics</label>
+            <input type="number" name="economics" min="0" max="100">
+
+            <label>Business Studies</label>
+            <input type="number" name="business" min="0" max="100">
+        </div>
 
         <button type="submit" class="btn">Save Marks</button>
     </form>
 </div>
+
+<script>
+    function showSubjects(section) {
+        // hide all subject groups
+        document.querySelectorAll('.subject-group').forEach(div => {
+            div.style.display = 'none';
+        });
+
+        // show selected group
+        document.getElementById(section).style.display = 'block';
+    }
+</script>
 
 </body>
 </html>

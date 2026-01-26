@@ -8,14 +8,14 @@ students_bp = Blueprint("student", __name__)
 def student_login():
     if request.method == 'POST':
         roll_no = request.form['roll_no']
-
+        student_check=students.find_one({'roll_no': roll_no})
         # TEMP TEST LOGIN
-        if roll_no == "101":
+        if student_check:
             return render_template('result.html')
         else:
             return render_template(
                 'index.html',
-                error='Invalid username or password'
+                error='Please enter a valid Roll Number'
             )
 
     return render_template('index.html')
@@ -23,4 +23,6 @@ def student_login():
 # STUDENT RESULT ROUTE
 @students_bp.route('/result', methods=['GET', 'POST'])  
 def student_result():
-    return render_template('result.html')
+    all_marks = list(marks.find())
+    total=
+    return render_template('result.html', marks=all_marks)

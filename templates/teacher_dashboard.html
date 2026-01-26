@@ -10,49 +10,37 @@
 <!-- HEADER -->
 <header class="header">
     <h1>Teacher Dashboard</h1>
-    <a href="teacher_login.html" class="logout-btn">Logout</a>
+    <a href="/teacher/login" class="logout-btn">Logout</a>
 </header>
 
 <!-- TOP ACTION BUTTON -->
 <div style="padding: 20px; text-align: right;">
-    <a href="add_student_marks.html" class="btn">Add / Update Student Marks</a>
+    <a href="/add-marks" class="btn">Add / Update Student Marks</a>
 </div>
-
 <!-- STUDENTS TABLE -->
 <table>
     <thead>
         <tr>
             <th>Roll No</th>
-            <th>Full Name</th>
-            <th>Class</th>
-            <th>Section</th>
-            <th>Action</th>
+            <th>section</th>
+            <th>subject</th>
+           
         </tr>
     </thead>
     <tbody>
 
         <!-- Ye rows MongoDB Atlas se aayengi -->
         <!-- Example static row (abhi ke liye) -->
-
+      {% for s in marks %}
         <tr>
-            <td>101</td>
-            <td>Aman Kumar</td>
-            <td>10</td>
-            <td>A</td>
-            <td>
-                <a href="add_student_marks.html" class="btn">Add Marks</a>
-            </td>
+            <td>{{ s.roll_no }}</td>
+            <td>{{ s.section }}</td>
+            <td>{{ s.subjects }}</td>
+    
+            
         </tr>
 
-        <tr>
-            <td>102</td>
-            <td>Rohit Sharma</td>
-            <td>10</td>
-            <td>B</td>
-            <td>
-                <a href="add_student_marks.html" class="btn">Add Marks</a>
-            </td>
-        </tr>
+        {% endfor %}
 
     </tbody>
 </table>

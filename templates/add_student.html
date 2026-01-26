@@ -72,8 +72,12 @@
         <label>Roll Number</label>
         <input type="text" name="roll_no" placeholder="Roll number" required>
 
-        <label>Class</label>
-        <input type="text" name="section" placeholder="e.g. 10" required>
+         <label>Course / Section</label><br>
+
+        <input type="radio" name="section" value="bscit" onclick="showSubjects('bscit')" required> BSc IT<br>
+        <input type="radio" name="section" value="bsccs" onclick="showSubjects('bsccs')"> BSc CS<br>
+        <input type="radio" name="section" value="bbi" onclick="showSubjects('bbi')"> BBI<br>
+        <input type="radio" name="section" value="bcom" onclick="showSubjects('bcom')"> BCom<br>
 
         <button type="submit" class="btn">Add Student</button>
     </form>
