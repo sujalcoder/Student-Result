@@ -4,7 +4,7 @@ from database import students, marks
 students_bp = Blueprint("student", __name__)
 
 # STUDENT LOGIN ROUTE
-@students_bp.route('/student/login', methods=['GET', 'POST'])
+@students_bp.route('/', methods=['GET', 'POST'])
 def student_login():
     if request.method == 'POST':
         roll_no = request.form['roll_no']
