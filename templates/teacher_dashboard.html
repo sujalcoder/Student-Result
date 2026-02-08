@@ -36,13 +36,84 @@
         table th {
             background: #e0e7ff;
         }
+        /* 🔍 Search Box */
+.search-box {
+    position: relative;
+    width: 300px;
+    margin: 20px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#suggestions {
+    background: white;
+    border: 1px solid #ccc;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #e0e7ff;
+}
+
+/* 🪟 Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background: white;
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15% auto;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
     </style>
 </head>
 
 <body>
 
 <h1>Teacher Dashboard</h1>
-
+<a href="/teacher/login" class="btn">Logout</a> </br>
+</br>
+<a href="/add-marks" class="btn">Add / Update Student Marks</a>
+<!-- 🔍 SEARCH BAR -->
+<div class="search-box">
+    <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search by Roll No..."
+        onkeyup="searchStudent()"
+    >
+    <div id="suggestions"></div>
+</div>
 {% for s in marks %}
 <div class="student-card">
 
@@ -73,6 +144,55 @@
 
 </div>
 {% endfor %}
+<!-- 🪟 MODAL -->
+<div id="studentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">✖</span>
+        <h3>Student Details</h3>
+
+        <p><strong>Roll No:</strong> <span id="mRoll"></span></p>
+        <p><strong>Name:</strong> <span id="mName"></span></p>
+        <p><strong>Section:</strong> <span id="mSection"></span></p>
+    </div>
+</div>
+<script>
+function searchStudent() {
+    const query = document.getElementById("searchInput").value;
+    const box = document.getElementById("suggestions");
+
+    if (query.length === 0) {
+        box.innerHTML = "";
+        return;
+    }
+
+    fetch(`/teacher/search-student?q=${query}`)
+        .then(res => res.json())
+        .then(data => {
+            box.innerHTML = "";
+
+            data.forEach(student => {
+                const div = document.createElement("div");
+                div.className = "suggestion-item";
+                div.innerText = student.roll_no + " - " + student.name;
+
+                div.onclick = () => openModal(student);
+                box.appendChild(div);
+            });
+        });
+}
+
+function openModal(student) {
+    document.getElementById("mRoll").innerText = student.roll_no;
+    document.getElementById("mName").innerText = student.name;
+    document.getElementById("mSection").innerText = student.section;
+
+    document.getElementById("studentModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("studentModal").style.display = "none";
+}
+</script>
 
 </body>
 </html>

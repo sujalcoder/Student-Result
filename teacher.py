@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import jsonify ,  Blueprint, render_template, request, redirect, url_for
 from database import teachers, marks, students
 
 teacher_bp = Blueprint("teacher", __name__)
@@ -92,3 +92,18 @@ def add_marks():
 
     success = request.args.get('success')
     return render_template('add_student_marks.html', success=success)
+
+#Student Search#
+@teacher_bp.route('/teacher/search-student')
+def search_student():
+    query = request.args.get('q', '')
+
+    if not query:
+        return jsonify([])
+
+    results = students.find(
+        {'roll_no': {'$regex': query, '$options': 'i'}},
+        {'_id': 0, 'roll_no': 1, 'name': 1, 'section': 1}
+    )
+
+    return jsonify(list(results))

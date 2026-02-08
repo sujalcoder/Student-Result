@@ -114,7 +114,11 @@ def add_student():
 def manage_student():  
     all_students = students.find()
     return render_template('manage_student.html', students=all_students)
-
+def delete_student():
+    roll_no = request.form['roll_no']
+    students.delete_one({'roll_no': roll_no})
+    marks.delete_many({'roll_no': roll_no})
+    return redirect(url_for('admin.manage_student'))
 
 #delete teacher route
 @admin_bp.route('/admin/delete-teacher', methods=['POST'])
