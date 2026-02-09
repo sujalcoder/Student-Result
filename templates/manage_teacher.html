@@ -184,7 +184,12 @@
         <tr>
             <td>{{ t.username }}</td>
             <td>{{ t.name }}</td>
-            <td>{{ t.section }}</td>
+            <td>
+    {% for sec in t.section %}
+        {{ sec }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+</td>
+
             <td>{{ t.rights }}</td>
             <td>{{ t.gender }}</td>
             <td>
@@ -210,7 +215,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('editModal')">&times;</span>
             <h2>Edit Teacher</h2>
-            <form id="editForm">
+            <form id="editForm" method="POST" action="/admin/update-teacher">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
@@ -224,12 +229,16 @@
                     <input type="password" id="password" name="password">
                 </div>
                 <div class="form-group">
-                    <label for="designation">Designation:</label>
-                    <input type="text" id="designation" name="designation" required>
+                     <label>Teacher </label>
+            <input type="checkbox" name="section[]" value="Bscit">B.Sc.I.T.</br>
+            <input type="checkbox" name="section[]" value="Bsccs">B.Sc.C.S.</br>
+            <input type="checkbox" name="section[]" value="Bcom">B.Com</br>
+            <input type="checkbox" name="section[]" value="Bbi">B.B.I</br>
+                    
                 </div>
                 <div class="form-group">
                     <label for="rights">Rights:</label>
-                    <select id="rights" name="rights" required>
+                    <select id="rights" name="rights" >
                         <option value="">Select Rights</option>
                         <option value="Admin">Admin</option>
                         <option value="Teacher">Teacher</option>
@@ -238,7 +247,7 @@
                 </div>
                 <div class="form-group">
                     <label for="gender">Gender:</label>
-                    <select id="gender" name="gender" required>
+                    <select id="gender" name="gender" >
                         <option value="">Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
@@ -258,18 +267,18 @@
             <a href="/admin/add-teacher" class="btn">Go</a>
         </div>
     <script>
-       function editTeacher(btn) {
+function editTeacher(btn) {
     const row = btn.closest('tr');
     const cells = row.children;
 
     document.getElementById('username').value = cells[0].innerText;
     document.getElementById('name').value = cells[1].innerText;
-    document.getElementById('designation').value = cells[2].innerText;
     document.getElementById('rights').value = cells[3].innerText;
     document.getElementById('gender').value = cells[4].innerText;
 
     document.getElementById('editModal').style.display = 'block';
 }
+
 
         
         function deleteTeacher(btn) {
@@ -282,12 +291,7 @@
             document.getElementById(modalId).style.display = 'none';
         }
         
-        document.getElementById('editForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Handle form submission here
-            alert('Teacher details updated successfully!');
-            closeModal('editModal');
-        });
+    
         
         window.onclick = function(event) {
             const modal = document.getElementById('editModal');

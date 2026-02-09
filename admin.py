@@ -69,6 +69,40 @@ def manage_teacher():
     all_teachers = list(teachers.find())
     return render_template('manage_teacher.html', teachers=all_teachers) 
 
+# UPDATE TEACHER ROUTE
+@admin_bp.route('/admin/update-teacher', methods=['POST'])
+def update_teacher():
+    print("UPDATE ROUTE HIT")
+    print(request.form)
+
+    username = request.form['username']
+    name = request.form['name']
+    password = request.form['password']
+    section = request.form.getlist('section[]')
+    rights = request.form.get('rights')
+    gender = request.form.get('gender')
+
+    update_data = {
+        'name': name,
+        'section': section,
+        'rights': rights,
+        'gender': gender
+    }
+
+    if password:
+        update_data['password'] = password
+
+    result = teachers.update_one(
+    {'username': username},
+    {'$set': update_data}
+)
+
+    print("MATCHED:", result.matched_count)
+    print("MODIFIED:", result.modified_count)
+
+
+    return redirect(url_for('admin.manage_teacher'))
+
 # ADD STUDENT ROUTE
 @admin_bp.route('/admin/add-student', methods=['GET', 'POST'])
 def add_student():
@@ -110,15 +144,47 @@ def add_student():
     return render_template('add_student.html')
 
 # MANAGE STUDENT ROUTE
-@admin_bp.route('/admin/manage-student', methods=['GET', 'POST'])  
+@admin_bp.route('/admin/manage-student', methods=['GET', 'POST']) 
+ 
 def manage_student():  
     all_students = students.find()
     return render_template('manage_student.html', students=all_students)
+
+#DELETE STUDENT ROUTE
+
+@admin_bp.route('/admin/delete-student', methods=['POST'])
 def delete_student():
-    roll_no = request.form['roll_no']
-    students.delete_one({'roll_no': roll_no})
-    marks.delete_many({'roll_no': roll_no})
+    from bson import ObjectId
+
+    student_id = request.form['student_id']
+
+    # delete student
+    students.delete_one({'_id': ObjectId(student_id)})
+
+    # also delete marks of that student
+    marks.delete_many({'student_id': ObjectId(student_id)})
+
     return redirect(url_for('admin.manage_student'))
+
+# UPDATE STUDENT ROUTE
+@admin_bp.route('/admin/update-student', methods=['POST'])
+def update_student():
+    from bson import ObjectId
+
+    student_id = request.form['student_id']
+    name = request.form['name']
+    section = request.form['section']
+
+    students.update_one(
+        {'_id': ObjectId(student_id)},
+        {'$set': {
+            'name': name.strip(),
+            'section': section
+        }}
+    )
+
+    return redirect(url_for('admin.manage_student'))
+
 
 #delete teacher route
 @admin_bp.route('/admin/delete-teacher', methods=['POST'])

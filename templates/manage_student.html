@@ -4,52 +4,78 @@
     <meta charset="UTF-8">
     <title>Manage Students</title>
 
-    <!-- ✅ Flask static CSS -->
+    <!-- Flask static CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
 
     <style>
-        /* ===== POPUP BACKGROUND ===== */
-        .popup-overlay {
+        /* ===== MODAL BACKGROUND ===== */
+        .modal {
+            display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background: rgba(0,0,0,0.6);
-            display: flex;
             justify-content: center;
             align-items: center;
             z-index: 999;
         }
 
-        /* ===== POPUP BOX ===== */
-        .popup {
+        /* ===== MODAL BOX ===== */
+        .modal-content {
             background: #fff;
             padding: 25px;
             border-radius: 10px;
-            width: 350px;
-            text-align: center;
+            width: 360px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            animation: popupFade 0.3s ease;
+            position: relative;
+            animation: popupFade 0.25s ease;
         }
 
-        .popup h3 {
-            color: #dc2626;
-            margin-bottom: 15px;
-        }
-
-        .popup button {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+        .close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
             cursor: pointer;
+            font-size: 20px;
         }
 
         @keyframes popupFade {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from { transform: scale(0.9); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .btn-edit {
+            background: #16a34a;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -58,18 +84,19 @@
 
 <header class="header">
     <h1>Manage Students</h1>
-    <a href="#" class="logout-btn">Logout</a>
+    <a href="/admin/dashboard" class="logout-btn">Back</a>
 </header>
 
 <div class="container">
 
     <h2>All Students</h2>
 
-    <table border="1" cellpadding="10">
+    <table>
         <tr>
             <th>Name</th>
             <th>Roll No</th>
             <th>Class</th>
+            <th>Actions</th>
         </tr>
 
         {% for s in students %}
@@ -77,33 +104,81 @@
             <td>{{ s.name }}</td>
             <td>{{ s.roll_no }}</td>
             <td>{{ s.section }}</td>
+            <td>
+                <button class="btn-edit"
+                    onclick="openStudentModal(
+                        '{{ s._id }}',
+                        '{{ s.name }}',
+                        '{{ s.roll_no }}',
+                        '{{ s.section }}'
+                    )">
+                    Edit
+                </button>
+
+                <form method="POST" action="/admin/delete-student" style="display:inline;">
+                    <input type="hidden" name="student_id" value="{{ s._id }}">
+                    <button type="submit" class="btn-delete"
+                        onclick="return confirm('Delete this student?')">
+                        Delete
+                    </button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
 
     <div class="card">
-        <h2>Add Students</h2>
-        <p>Add new students</p>
+        <h2>Add Student</h2>
+        <p>Add new student</p>
         <a href="/admin/add-student" class="btn">Go</a>
     </div>
 
 </div>
 
-<!-- 🔴 ERROR POPUP -->
-{% if error %}
-<div class="popup-overlay" id="popup">
-    <div class="popup">
-        <h3>Error</h3>
-        <p>{{ error }}</p>
-        <button onclick="closePopup()">OK</button>
+<!-- ===== EDIT STUDENT MODAL ===== -->
+<div id="studentModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeStudentModal()">✖</span>
+        <h3>Edit Student</h3>
+
+        <form method="POST" action="/admin/update-student">
+
+            <!-- hidden MongoDB id -->
+            <input type="hidden" name="student_id" id="student_id">
+
+            <label>Roll No</label>
+            <input type="text" id="roll_no" name="roll_no" readonly>
+
+            <label>Full Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label>Class</label>
+            <select id="section" name="section" required>
+                <option value="Bscit">B.Sc.IT</option>
+                <option value="Bsccs">B.Sc.CS</option>
+                <option value="Bcom">B.Com</option>
+                <option value="Bbi">B.B.I</option>
+            </select>
+
+            <br><br>
+            <button type="submit" class="btn-edit">Save</button>
+            <button type="button" class="btn-delete" onclick="closeStudentModal()">Cancel</button>
+        </form>
     </div>
 </div>
-{% endif %}
 
 <script>
-    function closePopup() {
-        document.getElementById("popup").style.display = "none";
-    }
+function openStudentModal(id, name, roll, section) {
+    document.getElementById('student_id').value = id;
+    document.getElementById('name').value = name;
+    document.getElementById('roll_no').value = roll;
+    document.getElementById('section').value = section;
+    document.getElementById('studentModal').style.display = 'flex';
+}
+
+function closeStudentModal() {
+    document.getElementById('studentModal').style.display = 'none';
+}
 </script>
 
 </body>
