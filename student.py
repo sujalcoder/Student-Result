@@ -23,25 +23,19 @@ def student_login():
 
 @students_bp.route('/result', methods=['POST'])
 def student_result():
-    roll_no = str(request.form['roll_no'])
+    roll_no = request.form['roll_no'].strip()
 
     marks_data = marks.find_one({'roll_no': roll_no})
-    print("MARKS DATA:", marks_data)
+    print("ROLL NO FROM FORM:", roll_no)
+    print("MARKS DATA FROM DB:", marks_data)
 
     if not marks_data:
         return render_template(
             'index.html',
-            error='No result found'
+            error='No result found for this Roll Number'
         )
 
-    # ✅ CASE A: NEW STRUCTURE
-    if 'subjects' in marks_data:
-        subjects = marks_data['subjects']
-
-    # ✅ CASE B: OLD STRUCTURE
-    else:
-        cursor = marks.find({'roll_no': roll_no})
-        subjects = {m['subject']: m['marks_obtained'] for m in cursor}
+    subjects = marks_data.get('subjects', {})
 
     if not subjects:
         return render_template(
@@ -49,6 +43,7 @@ def student_result():
             error='No subjects found for this Roll Number'
         )
 
+    # marks already int in DB 👍
     total = sum(subjects.values())
     percentage = round(total / (len(subjects) * 100) * 100, 2)
 

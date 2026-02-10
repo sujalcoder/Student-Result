@@ -114,6 +114,12 @@
     >
     <div id="suggestions"></div>
 </div>
+<!-- 🧾 STUDENT LIST -->
+{% for st in students %}
+  
+  Roll No: {{ st.roll_no }} | Name: {{ st.name }} | Section: {{ st.section }} <br>
+{% endfor %}
+<!-- 🧾 STUDENT MARKS -->
 {% for s in marks %}
 <div class="student-card">
 

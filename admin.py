@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request , redirect, url_for
 from database import teachers, marks ,students, admins
 from pymongo.errors import DuplicateKeyError
+import csv
+from io import TextIOWrapper
 admin_bp = Blueprint("admin", __name__)
 
 
@@ -192,3 +194,41 @@ def delete_teacher():
     username = request.form['username']
     teachers.delete_one({'username': username})
     return redirect(url_for('admin.manage_teacher'))
+
+
+
+from openpyxl import load_workbook
+
+@admin_bp.route('/admin/upload-students', methods=['POST'])
+def upload_students():
+    file = request.files['file']
+
+    if not file:
+        return redirect(url_for('admin.add_student'))
+
+    wb = load_workbook(file)
+    sheet = wb.active
+
+    added = 0
+    skipped = 0
+
+    # Excel rows read (skip header row)
+    for row in sheet.iter_rows(min_row=2, values_only=True):
+        roll_no, name, section = row
+
+        if not roll_no or not name or not section:
+            continue
+
+        # Check duplicate roll no
+        if students.find_one({'roll_no': str(roll_no)}):
+            skipped += 1
+            continue
+
+        students.insert_one({
+            'roll_no': str(roll_no),
+            'name': name.strip(),
+            'section': section
+        })
+        added += 1
+
+    return redirect(url_for('admin.manage_student'))

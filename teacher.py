@@ -30,10 +30,14 @@ def teacher_login():
 @teacher_bp.route('/teacher/dashboard')
 def teacher_dashboard():
     all_marks = list(marks.find())
+    all_student = list(students.find())
     return render_template(
         'teacher_dashboard.html',
-        marks=all_marks
+        marks=all_marks,
+        students=all_student
     )
+
+
 
 
 # ADD / UPDATE MARKS
