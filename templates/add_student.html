@@ -2,12 +2,246 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Student</title>
-
-    <!-- ✅ Flask static CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #4F46E5;
+            letter-spacing: -0.5px;
+        }
+
+        .logout-btn {
+            padding: 10px 24px;
+            background: #4F46E5;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        .logout-btn:hover {
+            background: #4338CA;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-container h2 {
+            margin-bottom: 32px;
+            color: #1F2937;
+            font-weight: 600;
+            font-size: 1.75rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 16px;
+        }
+
+        .form-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4F46E5, #7C3AED);
+            border-radius: 2px;
+        }
+
+        .form-container h3 {
+            margin-top: 48px;
+            margin-bottom: 24px;
+            color: #1F2937;
+            font-weight: 600;
+            font-size: 1.35rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .form-container h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #10B981, #059669);
+            border-radius: 2px;
+        }
+
+        .form-container hr {
+            margin: 48px 0;
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            margin-top: 20px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.95rem;
+        }
+
+        form input[type="text"],
+        form input[type="file"] {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: #F9FAFB;
+        }
+
+        form input[type="text"]:focus,
+        form input[type="file"]:focus {
+            outline: none;
+            border-color: #4F46E5;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        form input::placeholder {
+            color: #9CA3AF;
+        }
+
+        form input[type="file"] {
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .radio-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        form input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 14px 20px;
+            background: #F9FAFB;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        form input[type="radio"]:checked + .radio-label {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+            border-color: #4F46E5;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .radio-label:hover {
+            border-color: #4F46E5;
+            background: #EEF2FF;
+        }
+
+        form input[type="radio"]:checked + .radio-label:hover {
+            background: linear-gradient(135deg, #4338CA, #6D28D9);
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 32px;
+            padding: 16px;
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #4338CA, #6D28D9);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .form-container p {
+            font-size: 0.85rem;
+            color: #6B7280;
+            text-align: center;
+            margin-top: 12px;
+            font-style: italic;
+        }
+
         /* ===== POPUP OVERLAY ===== */
         .popup-overlay {
             position: fixed;
@@ -15,42 +249,122 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 999;
+            z-index: 9999;
+            backdrop-filter: blur(4px);
         }
 
         /* ===== POPUP BOX ===== */
         .popup {
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            width: 350px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 420px;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: popupFade 0.3s ease;
         }
 
         .popup h3 {
-            color: #dc2626;
-            margin-bottom: 10px;
+            color: #DC2626;
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .popup p {
+            color: #4B5563;
+            font-size: 1rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
         }
 
         .popup button {
-            background: #2563eb;
+            background: linear-gradient(135deg, #DC2626, #B91C1C);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 12px 32px;
+            border-radius: 10px;
             cursor: pointer;
-            margin-top: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .popup button:hover {
+            background: linear-gradient(135deg, #B91C1C, #991B1B);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        .popup button:active {
+            transform: translateY(0);
         }
 
         @keyframes popupFade {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from { 
+                transform: scale(0.8); 
+                opacity: 0; 
+            }
+            to { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .header h1 {
+                font-size: 1.35rem;
+            }
+
+            .form-container {
+                margin: 20px;
+                padding: 28px 24px;
+            }
+
+            .form-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .form-container h3 {
+                font-size: 1.2rem;
+            }
+
+            .radio-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .logout-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .popup {
+                padding: 32px 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                margin: 16px;
+                padding: 24px 20px;
+            }
+
+            .radio-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -72,51 +386,51 @@
         <label>Roll Number</label>
         <input type="text" name="roll_no" placeholder="Roll number" required>
 
-         <label>Course / Section</label><br>
-
-        <input type="radio" name="section" value="bscit" onclick="showSubjects('bscit')" required> BSc IT<br>
-        <input type="radio" name="section" value="bsccs" onclick="showSubjects('bsccs')"> BSc CS<br>
-        <input type="radio" name="section" value="bbi" onclick="showSubjects('bbi')"> BBI<br>
-        <input type="radio" name="section" value="bcom" onclick="showSubjects('bcom')"> BCom<br>
+        <label>Course / Section</label>
+        <div class="radio-container">
+            <div class="radio-option">
+                <input type="radio" name="section" value="bscit" id="bscit-radio" onclick="showSubjects('bscit')" required>
+                <label for="bscit-radio" class="radio-label">BSc IT</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="section" value="bsccs" id="bsccs-radio" onclick="showSubjects('bsccs')">
+                <label for="bsccs-radio" class="radio-label">BSc CS</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="section" value="bbi" id="bbi-radio" onclick="showSubjects('bbi')">
+                <label for="bbi-radio" class="radio-label">BBI</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" name="section" value="bcom" id="bcom-radio" onclick="showSubjects('bcom')">
+                <label for="bcom-radio" class="radio-label">BCom</label>
+            </div>
+        </div>
 
         <button type="submit" class="btn">Add Student</button>
     </form>
+
+    <hr>
+
+    <h3>Upload Students (Excel)</h3>
+
+    <form method="POST" action="/admin/upload-students" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx" required>
+        <button type="submit" class="btn">Upload Excel</button>
+    </form>
+
+    <p>* Excel must contain columns: roll_no, name, section</p>
 </div>
 
 <!-- 🔴 ERROR POPUP -->
 {% if error %}
 <div class="popup-overlay" id="popup">
     <div class="popup">
-        <h3>Error</h3>
+        <h3>⚠️ Error</h3>
         <p>{{ error }}</p>
         <button onclick="closePopup()">OK</button>
     </div>
 </div>
-
 {% endif %}
-<hr>
-
-<h3>Upload Students (Excel)</h3>
-
-<form method="POST"
-      action="/admin/upload-students"
-      enctype="multipart/form-data">
-
-    <input type="file"
-           name="file"
-           accept=".xlsx"
-           required>
-
-    <br><br>
-    <button type="submit" class="btn">
-        Upload Excel
-    </button>
-</form>
-
-<p style="font-size: 13px; color: #555;">
-    * Excel must contain columns: roll_no, name, section
-</p>
-
 
 <script>
     function closePopup() {
