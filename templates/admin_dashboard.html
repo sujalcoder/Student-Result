@@ -2,32 +2,221 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="C:\Users\sujal\OneDrive\Documents\Student_marks\style\admin.css">
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #4F46E5;
+            letter-spacing: -0.5px;
+        }
+
+        .logout-btn {
+            padding: 10px 24px;
+            background: #DC2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        }
+
+        .logout-btn:hover {
+            background: #B91C1C;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #4F46E5, #7C3AED);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 16px;
+        }
+
+        .card p {
+            color: #6B7280;
+            font-size: 1rem;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #4338CA, #6D28D9);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Icon Style for Cards */
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                margin: 40px auto;
+                grid-template-columns: 1fr;
+                padding: 0 20px;
+            }
+
+            .card {
+                padding: 32px 24px;
+            }
+
+            .card h2 {
+                font-size: 1.5rem;
+            }
+
+            .logout-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 30px auto;
+                padding: 0 16px;
+            }
+
+            .card {
+                padding: 28px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-        <h1>Admin Dashboard</h1>
-        <a href="/admin/login" class="logout-btn">Logout</a>
-    </header>
+<header>
+    <h1>Admin Dashboard</h1>
+    <a href="/admin/login" class="logout-btn">Logout</a>
+</header>
 
-    <div class="container">
-      
-
-        <div class="card">
-            <h2>Manage Teachers</h2>
-            <p>View / Remove teachers</p>
-            <a href="/admin/manage-teacher" class="btn">Go</a>
-        </div>
-
-        <div class="card">
-            <h2>Manage Students</h2>
-            <p>Add / Remove students</p>
-            <a href="/admin/manage-student" class="btn">Go</a>
-        </div>
+<div class="container">
+    <div class="card">
+        <div class="card-icon">👨‍🏫</div>
+        <h2>Manage Teachers</h2>
+        <p>View / Remove teachers</p>
+        <a href="/admin/manage-teacher" class="btn">Go</a>
     </div>
+
+    <div class="card">
+        <div class="card-icon">👨‍🎓</div>
+        <h2>Manage Students</h2>
+        <p>Add / Remove students</p>
+        <a href="/admin/manage-student" class="btn">Go</a>
+    </div>
+</div>
 
 </body>
 </html>

@@ -4,101 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Marks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-}
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-    height: 100vh;
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-.container {
-    background: white;
-    width: 400px;
-    padding: 30px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-}
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 480px;
+            padding: 50px 45px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease;
+        }
 
-.container h1 {
-    color: #1e3a8a;
-    margin-bottom: 8px;
-}
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-.subtitle {
-    color: #555;
-    margin-bottom: 25px;
-}
+        .logo-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+        }
 
-.form-box {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+        .container h1 {
+            color: #1F2937;
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 16px;
+        }
 
-.form-box input {
-    padding: 12px;
-    font-size: 15px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    outline: none;
-}
+        .container h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4F46E5, #7C3AED);
+            border-radius: 2px;
+        }
 
-.form-box input:focus {
-    border-color: #2563eb;
-}
+        .subtitle {
+            color: #6B7280;
+            margin-bottom: 32px;
+            font-size: 1rem;
+            font-weight: 400;
+        }
 
-.form-box button {
-    padding: 12px;
-    font-size: 16px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        .form-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-.form-box button:hover {
-    background: #1e40af;
-}
+        .form-box input {
+            padding: 16px 18px;
+            font-size: 1rem;
+            border-radius: 12px;
+            border: 2px solid #E5E7EB;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: #F9FAFB;
+        }
 
-.links {
-    margin-top: 20px;
-    font-size: 14px;
-}
+        .form-box input:focus {
+            border-color: #4F46E5;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
 
-.links a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 600;
-}
+        .form-box input::placeholder {
+            color: #9CA3AF;
+        }
 
-.links a:hover {
-    text-decoration: underline;
-}
+        .form-box button {
+            padding: 16px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
 
+        .form-box button:hover {
+            background: linear-gradient(135deg, #4338CA, #6D28D9);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .form-box button:active {
+            transform: translateY(0);
+        }
+
+        .links {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .links p {
+            font-size: 0.95rem;
+            color: #6B7280;
+        }
+
+        .links a {
+            color: #4F46E5;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .links a:hover {
+            color: #4338CA;
+            text-decoration: underline;
+        }
+
+        .divider {
+            margin: 28px 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 32px;
+            }
+
+            .container h1 {
+                font-size: 1.75rem;
+            }
+
+            .logo-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 35px 28px;
+            }
+
+            .container h1 {
+                font-size: 1.5rem;
+            }
+
+            .logo-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-icon">📚</div>
         <h1>Student Marks</h1>
-        <p>Welcome to the Student Marks System</p>
-        <form action="/result" method="post">
-        <input type="text" maxlength="1000" minlength="1" required name="roll_no" placeholder="Enter student RollNo" /></br>
-        <button type="submit">Get Marks</button>  
-    </form>
-    
-    <p>Are you a Teacher? <a href="/teacher/login">Teacher Login</a></p> </br>
-         <p>Are you a Admin? <a href="/admin/login">Admin Login</a></p> 
+        <p class="subtitle">Welcome to the Student Marks System</p>
+        
+        <form action="/result" method="post" class="form-box">
+            <input type="text" maxlength="1000" minlength="1" required name="roll_no" placeholder="Enter your Roll Number" />
+            <button type="submit">Get Marks</button>  
+        </form>
+        
+        <div class="divider"></div>
+        
+        <div class="links">
+            <p>Are you a Teacher? <a href="/teacher/login">Teacher Login</a></p>
+            <p>Are you an Admin? <a href="/admin/login">Admin Login</a></p>
+        </div>
+    </div>
 </body>
 </html>
