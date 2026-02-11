@@ -1,5 +1,7 @@
 from pymongo import MongoClient
-Mongo_URL="mongodb+srv://admin:admin@cluster0.atgtlwk.mongodb.net/?appName=Cluster0"
+import os
+Mongo_URL = os.environ.get("MONGO_URL")
+client = MongoClient(Mongo_URL)
 client = MongoClient(Mongo_URL)
 db = client['student_marks']
 

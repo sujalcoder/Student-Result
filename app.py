@@ -8,5 +8,7 @@ app.register_blueprint(students_bp)
 app.register_blueprint(teacher_bp)
 app.register_blueprint(admin_bp)
 
-app.run(debug=True)
+
+if __name__ == "__main__":
+    app.run()
 app = app
