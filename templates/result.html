@@ -313,11 +313,9 @@
 <a href="/" class="logout-link">← Back to Home</a>
 <!-- ===== REPORT CARD PDF TEMPLATE ===== -->
 <!-- ===== REPORT CARD PDF TEMPLATE ===== -->
-<div id="reportCard" style="
-    padding:40px;
-    font-family:'Poppins', Arial;
-    position: relative;
-">
+<div id="reportCard" style="display:none; background:white; padding:40px;">
+
+
 
     <!-- WATERMARK -->
     <div style="
@@ -394,19 +392,27 @@
 
 <script>
 function downloadResult() {
+
     const element = document.getElementById("reportCard");
 
+    // Temporarily show
+    element.style.display = "block";
+
     const options = {
-        margin: 0.5,
+        margin: 10,
         filename: "Report_Card_{{ roll_no }}.pdf",
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    html2pdf().from(element).set(options).save();
+    html2pdf().set(options).from(element).save().then(() => {
+        // Hide again after download
+        element.style.display = "none";
+    });
 }
 </script>
+
 
 </body>
 </html>
